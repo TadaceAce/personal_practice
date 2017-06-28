@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+ {% block title %} Home Page {% endblock %}
+
+
+
+{% block content %}
+<div class="container">
+Welcome
+{% if not user.is_authenticated %}
+Guest. Please login or<a href="{% url 'register' %}?next={{ request.path | urlencode }}"> register</a>. Use links in the header to navigate the page.
+
+{% else %}
+{{request.user.username}}
+{% endif %}
+
+<br>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+			

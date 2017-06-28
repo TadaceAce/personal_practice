@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Web Application</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+
+
+<div style="background:#5CD5E1 !important" class="jumbotron text-center">
+  <h1>Welcome To My First Web Application</h1>
+  <p>This web application served as a training tool for programming using a Python web framework.</p>
+    
+	<div class="container">
+	  <div class="row">
+		<div class="col-sm-3">
+		  <h3>About Me</h3>		
+		</div>
+		<div class="col-sm-3">
+		  <h3>About This Site</h3>		
+		</div>
+		<div class="col-sm-3">
+		  <h3>Interview Questions</h3>		 
+		</div>
+		<div class="col-sm-3">
+		  <h3>Personal Survey</h3>        
+		</div>
+	  </div>
+	</div>
+</div>
+ 
+
+{% if latest_question_list %}
+<ul>
+{% for question in latest_question_list %}
+<li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li> <br/>
+{% endfor %}
+</ul>
+{% else %}
+<p>No polls are available.</p>
+{% endif %}
+
+
+
+</body>
+</html>
+
+			

@@ -1,0 +1,39 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+{% block title %} Login {% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+
+
+
+    <h3> <a href="{% url 'social:begin' 'facebook' %}">
+  <img src="{% static 'polls/images/facebook_login.jpg' %}" style='width:250px;height:65px;' alt="My image"/>
+    </a> </h3>
+
+    <strong> OR </strong>
+
+    <h3>Login</h3>
+    <form method = "post">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <button type="submit">Login</button>
+    </form>
+
+    <br>
+
+      <strong> OR </strong>
+
+    <a href="{% url 'register' %}?next={{ request.path | urlencode }}"> <h3>Register</h3></a>
+
+<br>
+
+
+
+</div>
+{% endblock %}

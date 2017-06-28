@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} Play Kickball! {% endblock %}
+
+{% block content %}
+<div class="container">
+
+
+<p><h4>
+Welcome
+{% if not user.is_authenticated %}
+Guest. Please <a href ="{% url 'login' %}">login</a> or<a href="{% url 'register' %}"> create an account </a>before registering to play.
+
+{% else %}
+{{request.user.first_name}}.
+{% endif %}
+
+{% if user.is_authenticated %}
+
+Please select a league below.
+</h4></p>
+
+
+<p>
+    {% for location in upcoming_seasons %}
+    {{ location }} <br>
+    {% endfor %}
+</p>
+
+{% endif %}
+    <br>
+    <h4><a href="{% url 'reg_kickball' %}"> Bypass </a></h4>
+
+
+
+</div>
+{%endblock %}

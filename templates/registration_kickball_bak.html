@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap3 %}
+
+{% block title %} Play Kickball! {% endblock %}
+
+{% block content %}
+
+<body onload="HidePaid()">
+<div class="container">
+
+
+
+<h4>  Welcome
+{% if not user.is_authenticated %}
+Guest. Please <a href ="{% url 'login' %}">login</a> or<a href="{% url 'register' %}"> create an account </a>before registering to play.
+</h4>
+
+{% else %}
+{{request.user.first_name}}
+{% endif %}
+
+    <br><br>
+
+{% if user.is_authenticated %}
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+function HidePaid()
+{
+    document.getElementById('id_paid').disabled = true
+    document.getElementById('id_paid').style.visibility = 'hidden';
+
+}
+
+function checkForm()
+{
+
+    if(CreditCheck.checked)
+    {
+        confirm('You are registering using a free season credit, confirm?');
+        return true;
+    }
+
+    if(!PaidCheck.checked)
+    {
+        alert('Please complete payment or apply a season credit.');
+        return false;
+    }
+
+// validation was successful
+document.getElementById('id_paid').disabled = false;
+return true;
+}
+
+
+function check() {
+    document.getElementById("PaidCheck").checked = true;
+    document.getElementById('id_paid').disabled = false;
+    document.getElementById("id_paid").checked = true;
+    document.getElementById('id_paid').disabled = true;
+
+}
+
+
+</script>
+
+
+
+    <!--PAYPAL STUFF-->
+<script src="https://www.paypalobjects.com/api/checkout.js"></script>
+<script>
+
+    // Render the PayPal button
+
+    paypal.Button.render({
+
+        // Set your environment
+
+        env: 'sandbox', // sandbox | production
+
+        // PayPal Client IDs - replace with your own
+        // Create a PayPal app: https://developer.paypal.com/developer/applications/create
+
+        client: {
+            sandbox:    'ARKOJXbs_UPUzSscqgFJzfWbjzBY0Bth3U8L0JF9zjN5Hc8xBPoNN_Ig14D5Ac70aGsDzpdQWUlWcFNR',
+            production: '<insert production client id>'
+        },
+
+        // Set to 'Pay Now'
+
+        commit: true,
+
+        // Wait for the PayPal button to be clicked
+
+        payment: function() {
+
+            // Make a client-side call to the REST api to create the payment
+
+            return paypal.rest.payment.create(this.props.env, this.props.client, {
+                transactions: [
+                    {
+                        amount: { total: '0.01', currency: 'USD' }
+                    }
+                ]
+            });
+        },
+
+        // Wait for the payment to be authorized by the customer
+
+        onAuthorize: function(data, actions) {
+
+            // Execute the payment
+
+            return actions.payment.execute().then(function() {
+
+
+                // make sure to do this onLoad, for example jQuery's $()
+                check()
+                window.alert('Payment complete, please complete registration.');
+
+            });
+        }
+
+    }, '#paypal-button-container');
+</script>
+
+<!--END PAYPAL STUFF -->
+
+
+<form method="post" class = form onsubmit="return checkForm();" onload="HidePaid()">
+    {% csrf_token %}
+    {% bootstrap_form form layout='horizontal' %}
+
+ <div id="paypal-button-container"></div>
+
+
+
+    <p>
+
+        Paid: <input type="checkbox" id="PaidCheck" name="PaidCheck" onclick="return false;"> &nbsp; &nbsp;
+        Season Credit: <input type="checkbox" id="CreditCheck">  </p>
+
+
+
+    {% buttons %}
+        <button type="Register" class="btn btn-primary">
+            {% bootstrap_icon "star" %} Submit
+        </button>
+    {% endbuttons %}
+
+
+
+
+</form>
+
+
+{% endif %}
+
+
+
+
+<p> To do...  Make Paid ReadOnly or Hidden or ReadfromCheckbox??. Add team register page, Add price to league model and fetch for checkout
+
+</p>
+
+</div>
+
+</body>
+{%endblock %}
